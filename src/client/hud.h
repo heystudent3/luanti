@@ -154,5 +154,13 @@ private:
     } m_mode;
 
     bool m_is_voice_chatting = false;
+
+    // Members for draggable HUD elements
+    HudElement* m_dragged_hud_element = nullptr;
+    v2s32 m_drag_start_mouse_pos;
+    v2f m_drag_start_offset;
+
     void setVoiceChatStatus(bool is_active) { m_is_voice_chatting = is_active; }
+
+    bool handleMouseEvent(const irr::SEvent::SMouseInput &mouse_event);
 };
