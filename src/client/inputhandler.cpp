@@ -37,6 +37,7 @@ void MyEventReceiver::reloadKeybindings()
 	keybindings[KeyType::CMD_LOCAL] = getKeySetting("keymap_cmd_local");
 	keybindings[KeyType::CONSOLE] = getKeySetting("keymap_console");
 	keybindings[KeyType::MINIMAP] = getKeySetting("keymap_minimap");
+	keybindings[KeyType::VOICE_CHAT] = getKeySetting("keymap_voicechat");
 	keybindings[KeyType::FREEMOVE] = getKeySetting("keymap_freemove");
 	keybindings[KeyType::PITCHMOVE] = getKeySetting("keymap_pitchmove");
 	keybindings[KeyType::FASTMOVE] = getKeySetting("keymap_fastmove");
@@ -154,7 +155,14 @@ bool MyEventReceiver::OnEvent(const SEvent &event)
 				event.KeyInput.PressedDown && event.KeyInput.Shift) {
 			g_gamecallback->disconnect();
 			return true;
-		}
+		} else if (keyCode == keybindings[KeyType::VOICE_CHAT]) {
+            if (event.KeyInput.PressedDown) {
+                m_hud->setVoiceChatStatus(true);
+            } else {
+                m_hud->setVoiceChatStatus(false);
+            }
+            return true;
+        }
 	}
 
 	if (event.EventType == EET_MOUSE_INPUT_EVENT && !event.MouseInput.Simulated)
@@ -217,6 +225,12 @@ bool MyEventReceiver::OnEvent(const SEvent &event)
 /*
  * RealInputHandler
  */
+RealInputHandler::RealInputHandler(MyEventReceiver *receiver, Hud *hud) : m_receiver(receiver), m_hud(hud)
+{
+	m_receiver->joystick = &joystick;
+	m_receiver->reloadKeybindings();
+}
+
 float RealInputHandler::getJoystickSpeed()
 {
 	if (g_touchcontrols && g_touchcontrols->getJoystickSpeed())
