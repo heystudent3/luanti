@@ -45,58 +45,64 @@
 #define HOTBAR_IMAGE_SIZE 48
 
 enum HudElementType {
-	HUD_ELEM_IMAGE     = 0,
-	HUD_ELEM_TEXT      = 1,
-	HUD_ELEM_STATBAR   = 2,
-	HUD_ELEM_INVENTORY = 3,
-	HUD_ELEM_WAYPOINT  = 4,
-	HUD_ELEM_IMAGE_WAYPOINT = 5,
-	HUD_ELEM_COMPASS   = 6,
-	HUD_ELEM_MINIMAP   = 7,
-	HUD_ELEM_HOTBAR    = 8,
+    HUD_ELEM_IMAGE     = 0,
+    HUD_ELEM_TEXT      = 1,
+    HUD_ELEM_STATBAR   = 2,
+    HUD_ELEM_INVENTORY = 3,
+    HUD_ELEM_WAYPOINT  = 4,
+    HUD_ELEM_IMAGE_WAYPOINT = 5,
+    HUD_ELEM_COMPASS   = 6,
+    HUD_ELEM_MINIMAP   = 7,
+    HUD_ELEM_HOTBAR    = 8,
+    HUD_ELEM_SHADER_BUTTON = 9, // New shader button element
 };
 
 enum HudElementStat : u8 {
-	HUD_STAT_POS = 0,
-	HUD_STAT_NAME,
-	HUD_STAT_SCALE,
-	HUD_STAT_TEXT,
-	HUD_STAT_NUMBER,
-	HUD_STAT_ITEM,
-	HUD_STAT_DIR,
-	HUD_STAT_ALIGN,
-	HUD_STAT_OFFSET,
-	HUD_STAT_WORLD_POS,
-	HUD_STAT_SIZE,
-	HUD_STAT_Z_INDEX,
-	HUD_STAT_TEXT2,
-	HUD_STAT_STYLE,
-	HudElementStat_END // Dummy for validity check
+    HUD_STAT_POS = 0,
+    HUD_STAT_NAME,
+    HUD_STAT_SCALE,
+    HUD_STAT_TEXT,
+    HUD_STAT_NUMBER,
+    HUD_STAT_ITEM,
+    HUD_STAT_DIR,
+    HUD_STAT_ALIGN,
+    HUD_STAT_OFFSET,
+    HUD_STAT_WORLD_POS,
+    HUD_STAT_SIZE,
+    HUD_STAT_Z_INDEX,
+    HUD_STAT_TEXT2,
+    HUD_STAT_STYLE,
+    HudElementStat_END // Dummy for validity check
 };
 
 enum HudCompassDir {
-	HUD_COMPASS_ROTATE = 0,
-	HUD_COMPASS_ROTATE_REVERSE,
-	HUD_COMPASS_TRANSLATE,
-	HUD_COMPASS_TRANSLATE_REVERSE,
+    HUD_COMPASS_ROTATE = 0,
+    HUD_COMPASS_ROTATE_REVERSE,
+    HUD_COMPASS_TRANSLATE,
+    HUD_COMPASS_TRANSLATE_REVERSE,
 };
 
 struct HudElement {
-	HudElementType type;
-	v2f pos;
-	std::string name;
-	v2f scale;
-	std::string text;
-	u32 number;
-	u32 item;
-	u32 dir;
-	v2f align;
-	v2f offset;
-	v3f world_pos;
-	v2s32 size;
-	s16 z_index = 0;
-	std::string text2;
-	u32 style;
+    HudElementType type;
+    v2f pos;
+    std::string name;
+    v2f scale;
+    std::string text;
+    u32 number;
+    u32 item;
+    u32 dir;
+    v2f align;
+    v2f offset;
+    v3f world_pos;
+    v2s32 size;
+    s16 z_index = 0;
+    std::string text2;
+    u32 style;
+    // New fields for shader button
+    bool is_dragging = false;
+    bool is_menu_open = false;
+    std::string current_shader;
+    std::vector<std::string> shader_list;
 };
 
 extern const EnumString es_HudElementType[];
@@ -106,9 +112,9 @@ extern const EnumString es_HudBuiltinElement[];
 // Minimap stuff
 
 enum MinimapType {
-	MINIMAP_TYPE_OFF,
-	MINIMAP_TYPE_SURFACE,
-	MINIMAP_TYPE_RADAR,
-	MINIMAP_TYPE_TEXTURE,
+    MINIMAP_TYPE_OFF,
+    MINIMAP_TYPE_SURFACE,
+    MINIMAP_TYPE_RADAR,
+    MINIMAP_TYPE_TEXTURE,
 };
 
