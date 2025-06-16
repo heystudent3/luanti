@@ -12,6 +12,8 @@
 #include "secondstage.h"
 #include "client/shadows/dynamicshadowsrender.h"
 #include "shader.h" // Added for IShaderSource
+#include "raytracing_step.h"
+#include "draw_texture_step.h"
 
 // Forward declaration for the new cartoon pipeline
 void populateCartoonPipeline(RenderPipeline *pipeline, Client *client);
@@ -44,7 +46,24 @@ void createPipeline(const std::string &stereo_mode, IrrlichtDevice *device, Clie
         result.pipeline->addStep<RenderShadowMapStep>();
 
     if (stereo_mode == "none") {
-        populatePlainPipeline(result.pipeline, client);
+        // Create TextureBuffer for raytraced output
+        TextureBuffer *raytracing_output_buffer = result.pipeline->createOwned<TextureBuffer>();
+        raytracing_output_buffer->setTexture(0, v2f(1.0f, 1.0f), "raytraced_output", video::ECF_A8R8G8B8, true);
+
+        // Create TextureBufferOutput as a render target for RaytracingStep
+        TextureBufferOutput *raytracing_output_target = result.pipeline->createOwned<TextureBufferOutput>(raytracing_output_buffer, 0);
+
+        // Add RaytracingStep to the pipeline
+        RaytracingStep *raytracing_step = result.pipeline->addStep<RaytracingStep>();
+        raytracing_step->setRenderTarget(raytracing_output_target);
+
+        // Add DrawTextureStep to draw the raytraced output to the screen
+        DrawTextureStep *draw_texture_step = result.pipeline->addStep<DrawTextureStep>();
+        draw_texture_step->setRenderSource(raytracing_output_buffer);
+        draw_texture_step->setRenderTarget(result.pipeline->createOwned<ScreenTarget>());
+
+        // Temporarily disable original 3D rendering for testing raytracing
+        // populatePlainPipeline(result.pipeline, client);
         return;
     }
     if (stereo_mode == "anaglyph") {
@@ -79,10 +98,10 @@ void createPipeline(const std::string &stereo_mode, IrrlichtDevice *device, Clie
 
 void populateCartoonPipeline(RenderPipeline *pipeline, Client *client)
 {
-	IShaderSource *shsrc = client->getShaderSource();
-	u32 cartoon_shader_id = shsrc->getShader("cartoon", ShaderConstants(), video::EMT_SOLID);
+    IShaderSource *shsrc = client->getShaderSource();
+    u32 cartoon_shader_id = shsrc->getShader("cartoon", ShaderConstants(), video::EMT_SOLID);
 
-	pipeline->addStep<Draw3D>(cartoon_shader_id, client->getEnv()->getMap());
-	pipeline->addStep<DrawWield>();
-	pipeline->addStep<DrawHUD>();
+    pipeline->addStep<Draw3D>(cartoon_shader_id, client->getEnv()->getMap());
+    pipeline->addStep<DrawWield>();
+    pipeline->addStep<DrawHUD>();
 }
