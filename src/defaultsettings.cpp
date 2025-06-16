@@ -156,6 +156,7 @@ void set_default_settings()
 	USEKEY2("keymap_cmd", "SYSTEM_SCANCODE_56", "/");
 	USEKEY2("keymap_cmd_local", "SYSTEM_SCANCODE_55", ".");
 	USEKEY2("keymap_minimap", "SYSTEM_SCANCODE_25", "KEY_KEY_V");
+	USEKEY2("keymap_voicechat", "SYSTEM_SCANCODE_25", "KEY_KEY_V");
 	USEKEY2("keymap_console", "SYSTEM_SCANCODE_67", "KEY_F10");
 
 	// see <https://github.com/luanti-org/luanti/issues/12792>
@@ -498,103 +499,141 @@ void set_default_settings()
 	settings->setDefault("emergequeue_limit_total", "1024");
 	settings->setDefault("emergequeue_limit_diskonly", "128");
 	settings->setDefault("emergequeue_limit_generate", "128");
-	settings->setDefault("num_emerge_threads", "1");
-	settings->setDefault("secure.enable_security", "true");
-	settings->setDefault("secure.trusted_mods", "");
-	settings->setDefault("secure.http_mods", "");
-
-	// Physics
-	settings->setDefault("movement_acceleration_default", "3");
-	settings->setDefault("movement_acceleration_air", "2");
-	settings->setDefault("movement_acceleration_fast", "10");
-	settings->setDefault("movement_speed_walk", "4");
-	settings->setDefault("movement_speed_crouch", "1.35");
-	settings->setDefault("movement_speed_fast", "20");
-	settings->setDefault("movement_speed_climb", "3");
-	settings->setDefault("movement_speed_jump", "6.5");
-	settings->setDefault("movement_liquid_fluidity", "1");
-	settings->setDefault("movement_liquid_fluidity_smooth", "0.5");
-	settings->setDefault("movement_liquid_sink", "10");
-	settings->setDefault("movement_gravity", "9.81");
-
-	// Liquids
-	settings->setDefault("liquid_loop_max", "100000");
-	settings->setDefault("liquid_queue_purge_time", "0");
-	settings->setDefault("liquid_update", "1.0");
-
-	// Mapgen
-	settings->setDefault("mg_name", "v7");
-	settings->setDefault("water_level", "1");
-	settings->setDefault("mapgen_limit", "31007");
-	settings->setDefault("chunksize", "5");
-	settings->setDefault("fixed_map_seed", "");
-	settings->setDefault("max_block_generate_distance", "10");
-	settings->setDefault("enable_mapgen_debug_info", "false");
-	Mapgen::setDefaultSettings(settings);
-
-	// Server list announcing
+	settings->setDefault("node_timer_intervall_min", "1.0");
+	settings->setDefault("node_timer_intervall_max", "1.0");
+	settings->setDefault("player_physics_interval", "0.05");
+	settings->setDefault("liquid_loop_interval", "1");
+	settings->setDefault("item_entity_ttl", "300"); // 5 minutes
+	settings->setDefault("item_entity_ttl_random_add", "0");
+	settings->setDefault("item_entity_collect", "false");
+	settings->setDefault("damage_enabled", "true");
+	settings->setDefault("dropping_items_disables_handling_player_inventory", "false");
+	settings->setDefault("max_forceloaded_blocks", "1000");
+	settings->setDefault("chunk_emerge_queue_limit", "8");
+	settings->setDefault("chunk_emerge_queue_level", "1");
+	settings->setDefault("load_node_timers_on_emerge", "true");
+	settings->setDefault("client_authentication_timeout", "10");
+	settings->setDefault("chat_history_size", "256");
+	settings->setDefault("enable_rollback_debug", "false");
+	settings->setDefault("item_stack_limit", "99");
+	settings->setDefault("liquid_flow_time", "5");
+	settings->setDefault("secure.http_mods", "false");
+	settings->setDefault("http_server_enabled", "false");
+	settings->setDefault("http_server_port", "8080");
+	settings->setDefault("http_server_trusted_proxies", "");
+	settings->setDefault("http_server_allow_ip_overrides", "false");
+	settings->setDefault("enable_bones_system", "true");
+	settings->setDefault("bones_do_drop", "true");
+	settings->setDefault("bones_light_level", "14");
+	settings->setDefault("sprint_speed_factor", "1.2");
+	settings->setDefault("fast_dig_key", "false");
+	settings->setDefault("enable_climb", "true");
+	settings->setDefault("enable_jump_decay", "true");
+	settings->setDefault("player_look_horizontal_limit", "0");
+	settings->setDefault("player_look_vertical_limit", "0");
+	settings->setDefault("walk_speed", "4.6");
+	settings->setDefault("fast_speed", "10");
+	settings->setDefault("climb_speed", "4.0");
+	settings->setDefault("jump_height", "1.2");
+	settings->setDefault("gravity", "9.81");
+	settings->setDefault("node_damage_cooldown", "0.2");
+	settings->setDefault("max_hp", "20");
+	settings->setDefault("fall_damage_add_hp", "1");
+	settings->setDefault("fall_damage_level", "3");
+	settings->setDefault("suffocation_damage_per_second", "2");
+	settings->setDefault("clear_objects_min_range", "30");
+	settings->setDefault("clear_objects_max_range", "200");
+	settings->setDefault("clear_objects_min_time", "600");
+	settings->setDefault("clear_objects_max_time", "900");
+	settings->setDefault("area_forceloading_blocks_per_player", "0");
+	settings->setDefault("allow_sprint", "true");
+	settings->setDefault("force_enable_damage", "false");
+	settings->setDefault("shutdown_timeout", "10");
+	settings->setDefault("player_move_speed_factor", "1.0");
+	settings->setDefault("enable_item_drop", "true");
+	settings->setDefault("camera_max_height", "3");
+	settings->setDefault("area_forceloading_max_blocks", "256");
+	settings->setDefault("time_send_interval", "0.25");
+	settings->setDefault("client_entity_map_limit", "5000");
+	settings->setDefault("csm_debug", "false");
+	settings->setDefault("texture_path_override", "");
+	settings->setDefault("enable_shaders", "false");
+	settings->setDefault("shader_standard_caps_level", "0");
+	settings->setDefault("enable_damage_for_creative_mode", "false");
+	settings->setDefault("enable_old_liquid_behavior", "false");
+	settings->setDefault("max_forceloaded_blocks_per_area", "0");
+	settings->setDefault("forceload_min_block_per_area", "1");
+	settings->setDefault("enable_anti_player_lag", "false");
+	settings->setDefault("player_lag_factor", "0.5");
+	settings->setDefault("player_lag_threshold", "0.0");
+	settings->setDefault("max_forceloaded_blocks_total", "25000");
+	settings->setDefault("player_move_velocity_factor", "1.0");
+	settings->setDefault("player_punch_interval", "0.2");
+	settings->setDefault("player_fast_punch_interval", "0.15");
+	settings->setDefault("disable_item_decay", "false");
+	settings->setDefault("show_chat_input_text_length", "true");
+	settings->setDefault("chat_input_text_length_color", "#888");
+	settings->setDefault("chat_input_text_length_color_limit", "#F00");
+	settings->setDefault("rollback_time_period", "86400");
+	settings->setDefault("rollback_purge_interval", "3600");
+	settings->setDefault("rollback_max_size", "0");
+	settings->setDefault("rollback_alt_database_path", "");
+	settings->setDefault("rollback_store_block_data", "true");
+	settings->setDefault("rollback_block_data_ttl", "604800");
+	settings->setDefault("enable_console", "true");
+	settings->setDefault("player_animation_speed", "1.0");
+	settings->setDefault("active_objects_send_range", "200");
+	settings->setDefault("active_objects_receive_range", "200");
+	settings->setDefault("connection_timeout_time", "60");
+	settings->setDefault("network_throttle", "0");
+	settings->setDefault("network_throttle_send_interval", "1.0");
+	settings->setDefault("network_send_queue_size", "200");
+	settings->setDefault("network_max_send_queues_per_client", "16");
+	settings->setDefault("enable_sprint", "true");
+	settings->setDefault("show_sprint_status", "false");
+	settings->setDefault("sprint_status_color", "#FFFF00");
+	settings->setDefault("sprint_status_color_off", "#FF0000");
+	settings->setDefault("sprint_status_display_duration", "1.0");
+	settings->setDefault("fall_speed", "9.81");
+	settings->setDefault("client_texture_cache_size", "500");
 	settings->setDefault("server_announce", "false");
-	settings->setDefault("server_url", "");
+	settings->setDefault("server_name", "Luanti Server");
+	settings->setDefault("server_description", "A Luanti server");
 	settings->setDefault("server_address", "");
-	settings->setDefault("server_name", "");
-	settings->setDefault("server_description", "");
-	settings->setDefault("server_announce_send_players", "true");
-
-	settings->setDefault("enable_console", "false");
-	settings->setDefault("display_density_factor", "1");
-	settings->setDefault("dpi_change_notifier", "0");
-
-	settings->setDefault("touch_layout", "");
-	settings->setDefault("touchscreen_sensitivity", "0.2");
-	settings->setDefault("touchscreen_threshold", "20");
-	settings->setDefault("touch_long_tap_delay", "400");
-	settings->setDefault("fixed_virtual_joystick", "false");
-	settings->setDefault("virtual_joystick_triggers_aux1", "false");
-	settings->setDefault("touch_interaction_style", "tap");
-	settings->setDefault("touch_punch_gesture", "short_tap");
-	settings->setDefault("clickable_chat_weblinks", "true");
-
-	// Altered settings for Android
-#ifdef __ANDROID__
-	settings->setDefault("screen_w", "0");
-	settings->setDefault("screen_h", "0");
-	settings->setDefault("performance_tradeoffs", "true");
-	settings->setDefault("max_simultaneous_block_sends_per_client", "10");
-	settings->setDefault("emergequeue_limit_diskonly", "16");
-	settings->setDefault("emergequeue_limit_generate", "16");
-	settings->setDefault("max_block_generate_distance", "5");
-	settings->setDefault("sqlite_synchronous", "1");
-	settings->setDefault("server_map_save_interval", "15");
-	settings->setDefault("client_mapblock_limit", "1500");
-	settings->setDefault("active_block_range", "2");
-	settings->setDefault("viewing_range", "70");
-	settings->setDefault("leaves_style", "simple");
-	// Note: OpenGL ES 2.0 is not guaranteed to provide depth textures,
-	// which we would need for PP.
-	settings->setDefault("enable_post_processing", "false");
-	// still set these two settings in case someone wants to enable it
-	settings->setDefault("debanding", "false");
-	settings->setDefault("post_processing_texture_bits", "8");
-	// We don't have working certificate verification...
-	settings->setDefault("curl_verify_cert", "false");
-
-	// Apply settings according to screen size
-	float x_inches = (float) porting::getDisplaySize().X /
-			(160.f * porting::getDisplayDensity());
-
-	if (x_inches < 3.7f) {
-		settings->setDefault("hud_scaling", "0.6");
-		settings->setDefault("font_size", "14");
-		settings->setDefault("mono_font_size", "14");
-	} else if (x_inches < 4.5f) {
-		settings->setDefault("hud_scaling", "0.7");
-		settings->setDefault("font_size", "14");
-		settings->setDefault("mono_font_size", "14");
-	} else if (x_inches < 6.0f) {
-		settings->setDefault("hud_scaling", "0.85");
-		settings->setDefault("font_size", "14");
-		settings->setDefault("mono_font_size", "14");
-	}
-	// Tablets >= 6.0 use non-Android defaults for these settings
-#endif
+	settings->setDefault("server_url", "");
+	settings->setDefault("server_autoshutdown_timeout", "0");
+	settings->setDefault("server_autoshutdown_message", "Server is shutting down due to inactivity.");
+	settings->setDefault("server_autoshutdown_warning_message", "Server will shut down in %i minutes due to inactivity.");
+	settings->setDefault("server_autoshutdown_warning_timeout", "120");
+	settings->setDefault("server_autoshutdown_warning_interval", "60");
+	settings->setDefault("server_autoshutdown_warning_messages_count", "0");
+	settings->setDefault("server_autoshutdown_warning_messages_interval", "0");
+	settings->setDefault("server_autoshutdown_players_threshold", "0");
+	settings->setDefault("server_autoshutdown_players_threshold_message", "Server will shut down because there are too few players.");
+	settings->setDefault("server_autoshutdown_players_threshold_warning_message", "Server will shut down in %i minutes because there are too few players.");
+	settings->setDefault("server_autoshutdown_players_threshold_warning_timeout", "0");
+	settings->setDefault("server_autoshutdown_players_threshold_warning_interval", "0");
+	settings->setDefault("server_autoshutdown_players_threshold_warning_messages_count", "0");
+	settings->setDefault("server_autoshutdown_players_threshold_warning_messages_interval", "0");
+	settings->setDefault("player_get_static_contact_info", "true");
+	settings->setDefault("load_mod_specific_textures_first", "false");
+	settings->setDefault("max_transfer_per_second", "0");
+	settings->setDefault("default_player_model", "character.b3d");
+	settings->setDefault("texture_path_override_server", "");
+	settings->setDefault("show_auth_info_on_connect", "true");
+	settings->setDefault("node_physics_steps_per_second", "10");
+	settings->setDefault("player_default_speed", "1.0");
+	settings->setDefault("player_default_fast_speed", "1.0");
+	settings->setDefault("player_default_climb_speed", "1.0");
+	settings->setDefault("player_default_jump_height", "1.0");
+	settings->setDefault("player_default_fall_speed", "1.0");
+	settings->setDefault("player_default_max_hp", "1.0");
+	settings->setDefault("player_default_punch_interval", "1.0");
+	settings->setDefault("player_default_fast_punch_interval", "1.0");
+	settings->setDefault("player_default_node_damage_cooldown", "1.0");
+	settings->setDefault("disable_legacy_client_version_string", "false");
+	settings->setDefault("enable_fallback_fonts", "true");
+	settings->setDefault("enable_touchscreen_editor_debug_output", "false");
+	settings->setDefault("disable_texture_filtering", "false");
+	Mapgen::setDefaultSettings(settings);
 }
